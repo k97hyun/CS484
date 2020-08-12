@@ -1,0 +1,11 @@
+I=im2double(imread('RISDance.jpg'));
+f1 = [0,0,0,0,0;0,0,0,0,0;0,0,0,0,1;0,0,0,0,0;0,0,0,0,0];
+f2 = [1,0,0,0,-1;2,0,0,0,-2;3,0,0,0,-3;2,0,0,0,-2;1,0,0,0,-1];
+f3 = f2';
+f4 = [0,0,0,0,0;0,0,0,0,0;0,0,2,0,0;0,0,0,0,0;0,0,0,0,0] - ones(5)/25;
+%h=imfilter( I, fspecial('sobel'));
+h_corr=imfilter(I,f2);
+h_conv=imfilter(I,f2,'conv');
+figure(1); imshow(I);
+figure(2); imshow(h_corr);
+figure(3); imshow(h_conv);

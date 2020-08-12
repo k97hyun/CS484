@@ -1,0 +1,64 @@
+%This function will predict the category for every test image by finding
+%the training image with most similar features. Instead of 1 nearest
+%neighbor, you can vote based on k nearest neighbors which will increase
+%performance (although you need to pick a reasonable value for k).
+
+function predicted_categories = nearest_neighbor_classify(train_image_feats, train_labels, test_image_feats)
+% image_feats is an N x d matrix, where d is the dimensionality of the
+%  feature representation.
+% train_labels is an N x 1 cell array, where each entry is a string
+%  indicating the ground truth category for each training image.
+% test_image_feats is an M x d matrix, where d is the dimensionality of the
+%  feature representation. You can assume M = N unless you've modified the
+%  starter code.
+% predicted_categories is an M x 1 cell array, where each entry is a string
+%  indicating the predicted category for each test image.
+
+% Useful functions:
+%  matching_indices = strcmp(string, cell_array_of_strings)
+%    This can tell you which indices in train_labels match a particular
+%    category. Not necessary for simple one nearest neighbor classifier.
+ 
+%   [Y,I] = MIN(X) if you're only doing 1 nearest neighbor, or
+%   [Y,I] = SORT(X) if you're going to be reasoning about many nearest
+%   neighbors 
+
+
+% N2 = size(train_image_feats,1);
+% trt = train_image_feats.';
+% tet = test_image_feats.';
+% for i = 1:N2
+%     for j = 1:N1
+%         D(i,j) = sum(trt(:,i)-tet(:,j)).^2;
+%     end
+% end
+
+N1 = size(test_image_feats,1);
+D = pdist2(train_image_feats,test_image_feats);
+k = 15;
+label = unique(train_labels);
+size_l = size(label,1);
+[~, index] = sort(D,1);
+count = zeros(size_l,N1);
+for i = 1:N1
+    for j = 1:size_l
+        m = train_labels(index(1:k,i));
+        count(j,i) = sum(strcmp(label(j),m));
+    end
+end
+[~, index_l] = max(count,[],1);
+predicted_categories = label(index_l);
+end 
+
+
+
+
+
+
+
+
+
+
+
+
+
